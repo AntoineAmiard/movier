@@ -14,7 +14,7 @@ class MovieAppBar extends StatelessWidget {
       leading: Icon(Icons.arrow_back),
       stretch: true,
       pinned: true,
-      backgroundColor: Colors.purple[400],
+      backgroundColor: Colors.purpleAccent[100],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(),

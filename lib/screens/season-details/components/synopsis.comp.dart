@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class MovieSynopsis extends StatelessWidget {
+class TVSynopsis extends StatelessWidget {
   final String overview;
 
-  MovieSynopsis({this.overview});
+  TVSynopsis({this.overview});
   @override
   Widget build(BuildContext context) {
     return Opacity(

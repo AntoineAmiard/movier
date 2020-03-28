@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:movie_helper/models/movie.models.dart';
-
-import 'package:movie_helper/screens/movie-details/components/appbar.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/credits.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/genres.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/row-info.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/similar-movies.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/synopsis.comp.dart';
+import 'package:movie_helper/models/TV.models.dart';
+import 'package:movie_helper/models/season.models.dart';
+import 'package:movie_helper/screens/TV-details/components/appbar.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/credits.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/genres.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/row-info.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/seasons-overview.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/similar-tv.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/synopsis.comp.dart';
+import 'package:movie_helper/screens/season-details/components/episode-list.comp.dart';
+import 'package:movie_helper/screens/season-details/components/row-info.comp.dart';
 import 'package:movie_helper/services/http.service.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
-class MovieDetailsScreen extends StatefulWidget {
+class SeasonDetailsScreen extends StatefulWidget {
   final int id;
+  final int seasonNumber;
 
-  MovieDetailsScreen({this.id});
+  SeasonDetailsScreen({this.id, this.seasonNumber});
 
   @override
-  _MovieDetailsScreenState createState() => _MovieDetailsScreenState();
+  _TVDetailsScreenState createState() => _TVDetailsScreenState();
 }
 
-class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+class _TVDetailsScreenState extends State<SeasonDetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldstate = GlobalKey<ScaffoldState>();
   HttpService httpService = HttpService();
-  Movie movieDetails;
+  Season seasonDetails;
   ScrollController _scrollController;
   double appBarHeight = 100;
   double topFAB = 220;
@@ -33,9 +38,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     super.initState();
     _scrollController = new ScrollController();
     _scrollController.addListener(() => scrollListener());
-    httpService.getMovieDetails(widget.id).then(
+    httpService.getSeasonDetails(widget.id, widget.seasonNumber).then(
           (data) => setState(() {
-            this.movieDetails = data;
+            this.seasonDetails = data;
           }),
         );
   }
@@ -44,17 +49,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldstate,
-      body: this.movieDetails == null
+      body: this.seasonDetails == null
           ? Center(child: CircularProgressIndicator())
           : new Stack(
               children: <Widget>[
                 CustomScrollView(
                   controller: _scrollController,
                   slivers: <Widget>[
-                    MovieAppBar(
-                      posterPath: movieDetails.posterPath,
-                      title: movieDetails.title,
-                    ),
+                    TVAppBar(
+                        posterPath: seasonDetails.posterPath,
+                        title: seasonDetails.name),
                     SliverPadding(
                       padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
                       sliver: SliverList(
@@ -62,16 +66,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           [
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child:
-                                  GenreMovieWrap(genres: movieDetails.genres),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: MovieRowInfo(
-                                posterPath: movieDetails.posterPath,
-                                time: movieDetails.time,
-                                releaseDate: movieDetails.releaseDate,
-                                voteAverage: movieDetails.voteAverage,
+                              child: SeasonRowInfo(
+                                numberOfEpisode: seasonDetails.numberOfEpisode,
+                                releaseDate: seasonDetails.airDate,
                               ),
                             ),
                             Divider(
@@ -79,8 +76,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: MovieSynopsis(
-                                overview: movieDetails.overview,
+                              child: TVSynopsis(
+                                overview: seasonDetails.overview,
                               ),
                             ),
                             Divider(
@@ -88,19 +85,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: MovieCredits(
-                                credits: movieDetails.credits,
+                              child: EpisodeList(
+                                episodes: seasonDetails.episodes,
                               ),
                             ),
-                            Divider(
-                              thickness: 1,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: SimilarMovies(
-                                movies: movieDetails.similarMovies,
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -110,22 +98,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 Positioned(
                   top: topFAB,
                   right: 25.0,
-                  child: Row(
-                    children: <Widget>[
-                      FloatingActionButton(
-                        onPressed: _onTapPlay,
-                        backgroundColor: Colors.white,
-                        child: Icon(Icons.live_tv),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: FloatingActionButton(
-                          onPressed: _onTapFav,
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.favorite_border),
-                        ),
-                      ),
-                    ],
+                  child: FloatingActionButton(
+                    onPressed: _onTapPlay,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.live_tv),
                   ),
                 ),
                 Positioned(
@@ -135,7 +111,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       child: Image.network(
-                        "https://image.tmdb.org/t/p/w780/${movieDetails.posterPath}",
+                        "https://image.tmdb.org/t/p/w780/${seasonDetails.posterPath}",
                         height: posterHeight,
                       ),
                     ),
@@ -171,19 +147,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   void _onTapPlay() async {
-    String url = "https://www.youtube.com/watch?v=${movieDetails.video.id}";
-    if (await canLaunch(url))
+    String url = "https://www.youtube.com/watch?v=${seasonDetails.video.id}";
+    if (seasonDetails.video.id == null)
+      displaySnackBar(
+          message: "Aucune video disponible", backgroundColor: Colors.red);
+    else if (await canLaunch(url))
       await launch(url);
     else
       displaySnackBar(
           message: "Impossible d'ouvrir le lien", backgroundColor: Colors.red);
-  }
-
-  void _onTapFav() {
-    displaySnackBar(
-      backgroundColor: Colors.teal,
-      message: "Film \"${movieDetails.title}\" ajouté avec succés",
-    );
   }
 
   void displaySnackBar({String message, Color backgroundColor}) {
@@ -200,7 +172,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       action: SnackBarAction(
         textColor: Colors.white,
         label: "OK",
-        onPressed: () => _scaffoldstate.currentState.hideCurrentSnackBar(),
+        onPressed: () => _scaffoldstate.currentState
+            .hideCurrentSnackBar(reason: SnackBarClosedReason.action),
       ),
     );
     _scaffoldstate.currentState.showSnackBar(snackBar);

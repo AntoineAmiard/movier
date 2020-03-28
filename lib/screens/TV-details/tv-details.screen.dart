@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:movie_helper/models/movie.models.dart';
-
-import 'package:movie_helper/screens/movie-details/components/appbar.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/credits.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/genres.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/row-info.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/similar-movies.comp.dart';
-import 'package:movie_helper/screens/movie-details/components/synopsis.comp.dart';
+import 'package:movie_helper/models/TV.models.dart';
+import 'package:movie_helper/screens/TV-details/components/appbar.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/credits.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/genres.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/row-info.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/seasons-overview.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/similar-tv.comp.dart';
+import 'package:movie_helper/screens/TV-details/components/synopsis.comp.dart';
 import 'package:movie_helper/services/http.service.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
-class MovieDetailsScreen extends StatefulWidget {
+class TVDetailsScreen extends StatefulWidget {
   final int id;
 
-  MovieDetailsScreen({this.id});
+  TVDetailsScreen({this.id});
 
   @override
-  _MovieDetailsScreenState createState() => _MovieDetailsScreenState();
+  _TVDetailsScreenState createState() => _TVDetailsScreenState();
 }
 
-class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+class _TVDetailsScreenState extends State<TVDetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldstate = GlobalKey<ScaffoldState>();
   HttpService httpService = HttpService();
-  Movie movieDetails;
+  TV tvDetails;
   ScrollController _scrollController;
   double appBarHeight = 100;
   double topFAB = 220;
@@ -33,9 +34,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     super.initState();
     _scrollController = new ScrollController();
     _scrollController.addListener(() => scrollListener());
-    httpService.getMovieDetails(widget.id).then(
+    httpService.getTVDetails(widget.id).then(
           (data) => setState(() {
-            this.movieDetails = data;
+            this.tvDetails = data;
           }),
         );
   }
@@ -44,16 +45,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldstate,
-      body: this.movieDetails == null
+      body: this.tvDetails == null
           ? Center(child: CircularProgressIndicator())
           : new Stack(
               children: <Widget>[
                 CustomScrollView(
                   controller: _scrollController,
                   slivers: <Widget>[
-                    MovieAppBar(
-                      posterPath: movieDetails.posterPath,
-                      title: movieDetails.title,
+                    TVAppBar(
+                      posterPath: tvDetails.posterPath,
+                      title: tvDetails.title,
                     ),
                     SliverPadding(
                       padding: EdgeInsets.fromLTRB(20, 50, 20, 20),
@@ -62,16 +63,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           [
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child:
-                                  GenreMovieWrap(genres: movieDetails.genres),
+                              child: GenreTVWrap(genres: tvDetails.genres),
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: MovieRowInfo(
-                                posterPath: movieDetails.posterPath,
-                                time: movieDetails.time,
-                                releaseDate: movieDetails.releaseDate,
-                                voteAverage: movieDetails.voteAverage,
+                              child: TVRowInfo(
+                                numberOfSeasons: tvDetails.numbeOfSeasons,
+                                releaseDate: tvDetails.releaseDate,
+                                voteAverage: tvDetails.voteAverage,
                               ),
                             ),
                             Divider(
@@ -79,8 +78,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: MovieSynopsis(
-                                overview: movieDetails.overview,
+                              child: TVSynopsis(
+                                overview: tvDetails.overview,
                               ),
                             ),
                             Divider(
@@ -88,8 +87,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: MovieCredits(
-                                credits: movieDetails.credits,
+                              child: SeasonsOverviewList(
+                                seasons: tvDetails.seasonsOverview,
                               ),
                             ),
                             Divider(
@@ -97,8 +96,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: SimilarMovies(
-                                movies: movieDetails.similarMovies,
+                              child: TVCredits(
+                                credits: tvDetails.credits,
+                              ),
+                            ),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: SimilarTVs(
+                                tvs: tvDetails.similar,
                               ),
                             )
                           ],
@@ -135,7 +143,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       child: Image.network(
-                        "https://image.tmdb.org/t/p/w780/${movieDetails.posterPath}",
+                        "https://image.tmdb.org/t/p/w780/${tvDetails.posterPath}",
                         height: posterHeight,
                       ),
                     ),
@@ -171,7 +179,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   void _onTapPlay() async {
-    String url = "https://www.youtube.com/watch?v=${movieDetails.video.id}";
+    String url = "https://www.youtube.com/watch?v=${tvDetails.video.id}";
     if (await canLaunch(url))
       await launch(url);
     else
@@ -182,7 +190,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   void _onTapFav() {
     displaySnackBar(
       backgroundColor: Colors.teal,
-      message: "Film \"${movieDetails.title}\" ajouté avec succés",
+      message: "Film \"${tvDetails.title}\" ajouté avec succés",
     );
   }
 

@@ -18,6 +18,7 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      elevation: 12,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
             icon: Icon(

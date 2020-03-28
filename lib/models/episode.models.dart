@@ -5,12 +5,14 @@ class Episode {
   final String name;
   final String overview;
   final String stillPath;
+  final double voteAverage;
 
   Episode({
     @required this.id,
     @required this.name,
     @required this.overview,
     @required this.stillPath,
+    @required this.voteAverage,
   });
 
   factory Episode.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class Episode {
       name: json['name'],
       overview: json['overview'],
       stillPath: json['still_path'],
+      voteAverage: json['vote_average'],
     );
   }
 }

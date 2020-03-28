@@ -1,7 +1,7 @@
 import 'package:movie_helper/models/genres.models.dart';
 import 'package:movie_helper/models/overview.models.dart';
 
-class DataDiscoverView {
+class Discover {
   final List<Overview> popularMovies;
   final List<Overview> topRatedMovies;
   final List<Overview> nowPlayingMovies;
@@ -10,7 +10,7 @@ class DataDiscoverView {
   final List<Overview> topRatedTv;
   final List<Genre> genresTv;
 
-  DataDiscoverView({
+  Discover({
     this.genresMovie,
     this.genresTv,
     this.nowPlayingMovies,

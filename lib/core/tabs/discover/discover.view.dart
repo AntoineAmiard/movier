@@ -5,7 +5,7 @@ import 'package:movie_helper/core/tabs/discover/components/horizontal-overview-l
 import 'package:movie_helper/core/tabs/discover/components/sliver-app-bar.comp.dart';
 import 'package:movie_helper/core/tabs/discover/components/sliver-bloc-list.comp.dart';
 import 'package:movie_helper/core/tabs/discover/components/sliver-divider.comp.dart';
-import 'package:movie_helper/core/tabs/discover/models/data-discover.models.dart';
+import 'package:movie_helper/models/discover.models.dart';
 import 'package:movie_helper/services/http.service.dart';
 
 class DiscoverView extends StatefulWidget {
@@ -15,7 +15,7 @@ class DiscoverView extends StatefulWidget {
 
 class _DiscoverViewState extends State<DiscoverView> {
   HttpService httpService = new HttpService();
-  DataDiscoverView data;
+  Discover data;
 
   @override
   void initState() {
@@ -102,8 +102,8 @@ class _DiscoverViewState extends State<DiscoverView> {
           );
   }
 
-  Future<DataDiscoverView> loadData() async {
-    return DataDiscoverView(
+  Future<Discover> loadData() async {
+    return Discover(
       nowPlayingMovies: await httpService.getNowPlayingMovies(),
       popularMovies: await httpService.getPopularMovies(),
       topRatedMovies: await httpService.getTopRatedMovies(),

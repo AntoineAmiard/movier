@@ -5,8 +5,10 @@ class Overview {
   final int id;
   final String title;
   final String posterPath;
+  final String jobCharacter;
 
   Overview({
+    this.jobCharacter,
     this.mediaType,
     @required this.id,
     @required this.title,
@@ -37,6 +39,7 @@ class Overview {
       id: json['id'],
       title: json['name'],
       posterPath: json["profile_path"],
+      jobCharacter: json['job'] ?? json['character'],
     );
   }
 }

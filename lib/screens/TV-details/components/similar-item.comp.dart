@@ -19,7 +19,7 @@ class OverviewItem extends StatelessWidget {
             imageUrl: "https://image.tmdb.org/t/p/w780/${this.posterPath}",
             imageBuilder: (context, image) {
               return Container(
-                height: 220,
+                height: 240,
                 width: 150,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
