@@ -6,6 +6,7 @@ import 'package:movie_helper/core/tabs/discover/components/sliver-app-bar.comp.d
 import 'package:movie_helper/core/tabs/discover/components/sliver-bloc-list.comp.dart';
 import 'package:movie_helper/core/tabs/discover/components/sliver-divider.comp.dart';
 import 'package:movie_helper/models/discover.models.dart';
+import 'package:movie_helper/screens/movie-details/movie-details.screen.dart';
 import 'package:movie_helper/services/http.service.dart';
 
 class DiscoverView extends StatefulWidget {
@@ -44,7 +45,9 @@ class _DiscoverViewState extends State<DiscoverView> {
                 ),
                 SliverBloc(
                   title: "Les plus populaires",
-                  list: HorizontalOverviewList(list: data.popularMovies),
+                  list: HorizontalOverviewList(
+                    list: data.popularMovies,
+                  ),
                   maxHeight: 300,
                   minHeight: 240,
                 ),

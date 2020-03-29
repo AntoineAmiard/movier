@@ -113,6 +113,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   child: Row(
                     children: <Widget>[
                       FloatingActionButton(
+                        heroTag: 'movie_youtube',
                         onPressed: _onTapPlay,
                         backgroundColor: Colors.white,
                         child: Icon(Icons.live_tv),
@@ -120,6 +121,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: FloatingActionButton(
+                          heroTag: 'movie_fav',
                           onPressed: _onTapFav,
                           backgroundColor: Colors.white,
                           child: Icon(Icons.favorite_border),

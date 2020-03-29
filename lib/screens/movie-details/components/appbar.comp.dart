@@ -11,10 +11,12 @@ class MovieAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      leading: Icon(Icons.arrow_back),
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () => _onTapAction(context),
+      ),
       stretch: true,
       pinned: true,
-      backgroundColor: Colors.purpleAccent[100],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(),
@@ -31,5 +33,9 @@ class MovieAppBar extends StatelessWidget {
             ),
           )),
     );
+  }
+
+  void _onTapAction(context) {
+    Navigator.pop(context);
   }
 }

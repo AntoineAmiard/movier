@@ -12,7 +12,6 @@ class SeasonAppBar extends StatelessWidget {
       leading: Icon(Icons.arrow_back),
       stretch: true,
       pinned: true,
-      backgroundColor: Colors.purpleAccent[100],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(),

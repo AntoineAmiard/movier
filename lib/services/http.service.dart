@@ -210,12 +210,12 @@ class HttpService {
     }
   }
 
-  Future<Season> getSeasonDetails(int TvId, int seasonNumber) async {
+  Future<Season> getSeasonDetails(int id, int seasonNumber) async {
     Map<String, String> queryParams = {
       "language": language,
       "append_to_response": "videos",
     };
-    Uri uri = Uri.https(host, "/3/tv/$TvId/season/$seasonNumber", queryParams);
+    Uri uri = Uri.https(host, "/3/tv/$id/season/$seasonNumber", queryParams);
     var res = await http.get(uri, headers: headers);
     if (res.statusCode == 200) {
       Map<String, dynamic> result = jsonDecode(res.body);

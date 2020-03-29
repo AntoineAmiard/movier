@@ -23,7 +23,7 @@ class EpisodeList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               Episode episode = episodes[index];
               return Card(
-                margin: EdgeInsets.symmetric(vertical: 3),
+                margin: EdgeInsets.symmetric(vertical: 8),
                 child: Container(
                   margin: EdgeInsets.all(5),
                   child: Column(

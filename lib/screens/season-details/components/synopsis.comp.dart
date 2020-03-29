@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class TVSynopsis extends StatelessWidget {
+class SeasonSynopsis extends StatelessWidget {
   final String overview;
 
-  TVSynopsis({this.overview});
+  SeasonSynopsis({this.overview});
   @override
   Widget build(BuildContext context) {
+    print("overview : $overview");
     return Opacity(
       opacity: 0.9,
       child: Column(
@@ -19,7 +20,8 @@ class TVSynopsis extends StatelessWidget {
             height: 10,
           ),
           Text(
-            overview,
+            overview == "" ? "Aucun synopsis disponible" : overview,
+            style: TextStyle(color: overview == "" ? Colors.red : null),
             textAlign: TextAlign.justify,
           )
         ],

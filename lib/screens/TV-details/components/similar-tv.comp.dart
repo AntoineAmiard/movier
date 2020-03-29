@@ -4,6 +4,7 @@ import 'package:movie_helper/core/tabs/discover/components/overview-item.comp.da
 import 'package:movie_helper/models/TV.models.dart';
 import 'package:movie_helper/models/movie.models.dart';
 import 'package:movie_helper/models/overview.models.dart';
+import 'package:movie_helper/screens/TV-details/tv-details.screen.dart';
 import 'package:movie_helper/services/http.service.dart';
 
 class SimilarTVs extends StatelessWidget {
@@ -32,13 +33,27 @@ class SimilarTVs extends StatelessWidget {
               Overview item = tvs[index];
               return Padding(
                 padding: EdgeInsets.only(right: 10),
-                child:
-                    OverviewItem(name: item.title, posterPath: item.posterPath),
+                child: GestureDetector(
+                  child: OverviewItem(
+                      name: item.title, posterPath: item.posterPath),
+                  onTap: () => onTvTap(item.id, context),
+                ),
               );
             },
           ),
         ),
       ],
+    );
+  }
+
+  void onTvTap(int id, context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TVDetailsScreen(
+          id: id,
+        ),
+      ),
     );
   }
 }

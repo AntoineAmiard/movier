@@ -89,6 +89,7 @@ class _TVDetailsScreenState extends State<TVDetailsScreen> {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: SeasonsOverviewList(
                                 seasons: tvDetails.seasonsOverview,
+                                tvId: tvDetails.id,
                               ),
                             ),
                             Divider(
@@ -121,6 +122,7 @@ class _TVDetailsScreenState extends State<TVDetailsScreen> {
                   child: Row(
                     children: <Widget>[
                       FloatingActionButton(
+                        heroTag: 'tv_youtube',
                         onPressed: _onTapPlay,
                         backgroundColor: Colors.white,
                         child: Icon(Icons.live_tv),
@@ -128,6 +130,7 @@ class _TVDetailsScreenState extends State<TVDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: FloatingActionButton(
+                          heroTag: 'tv_fav',
                           onPressed: _onTapFav,
                           backgroundColor: Colors.white,
                           child: Icon(Icons.favorite_border),

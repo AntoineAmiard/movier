@@ -10,6 +10,7 @@ import 'package:movie_helper/screens/TV-details/components/similar-tv.comp.dart'
 import 'package:movie_helper/screens/TV-details/components/synopsis.comp.dart';
 import 'package:movie_helper/screens/season-details/components/episode-list.comp.dart';
 import 'package:movie_helper/screens/season-details/components/row-info.comp.dart';
+import 'package:movie_helper/screens/season-details/components/synopsis.comp.dart';
 import 'package:movie_helper/services/http.service.dart';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -21,10 +22,10 @@ class SeasonDetailsScreen extends StatefulWidget {
   SeasonDetailsScreen({this.id, this.seasonNumber});
 
   @override
-  _TVDetailsScreenState createState() => _TVDetailsScreenState();
+  _SeasonDetailsScreenState createState() => _SeasonDetailsScreenState();
 }
 
-class _TVDetailsScreenState extends State<SeasonDetailsScreen> {
+class _SeasonDetailsScreenState extends State<SeasonDetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldstate = GlobalKey<ScaffoldState>();
   HttpService httpService = HttpService();
   Season seasonDetails;
@@ -76,7 +77,7 @@ class _TVDetailsScreenState extends State<SeasonDetailsScreen> {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10),
-                              child: TVSynopsis(
+                              child: SeasonSynopsis(
                                 overview: seasonDetails.overview,
                               ),
                             ),

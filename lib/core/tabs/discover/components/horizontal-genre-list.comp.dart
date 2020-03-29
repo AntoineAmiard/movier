@@ -10,14 +10,15 @@ class HorizontalGenreList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, index) {
-          Genre genre = list[index];
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            child: GenreItem(name: genre.name, index: index),
-          );
-        });
+      scrollDirection: Axis.horizontal,
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, index) {
+        Genre genre = list[index];
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 5),
+          child: GenreItem(name: genre.name, index: index),
+        );
+      },
+    );
   }
 }

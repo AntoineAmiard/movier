@@ -84,9 +84,12 @@ class TVCredits extends StatelessWidget {
                                 ),
                               ),
                       ),
-                      Text(
-                        item.title,
-                        textAlign: TextAlign.center,
+                      Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Text(
+                          item.title,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       Opacity(
                         opacity: 0.7,

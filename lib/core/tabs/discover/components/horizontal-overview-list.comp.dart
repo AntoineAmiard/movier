@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_helper/core/tabs/discover/components/overview-item.comp.dart';
-import 'package:movie_helper/models/TV.models.dart';
-import 'package:movie_helper/models/movie.models.dart';
 import 'package:movie_helper/models/overview.models.dart';
-import 'package:movie_helper/services/http.service.dart';
+import 'package:movie_helper/screens/TV-details/tv-details.screen.dart';
+import 'package:movie_helper/screens/movie-details/movie-details.screen.dart';
 
 class HorizontalOverviewList extends StatelessWidget {
   final List<Overview> list;
@@ -20,9 +18,36 @@ class HorizontalOverviewList extends StatelessWidget {
         Overview item = list[index];
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 5),
-          child: OverviewItem(name: item.title, posterPath: item.posterPath),
+          child: GestureDetector(
+            child: OverviewItem(name: item.title, posterPath: item.posterPath),
+            onTap: () => item.mediaType == "movie"
+                ? onMovieTap(item.id, context)
+                : onTvTap(item.id, context),
+          ),
         );
       },
+    );
+  }
+
+  void onTvTap(int id, context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TVDetailsScreen(
+          id: id,
+        ),
+      ),
+    );
+  }
+
+  void onMovieTap(int id, context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieDetailsScreen(
+          id: id,
+        ),
+      ),
     );
   }
 }
