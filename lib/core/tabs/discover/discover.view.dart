@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:movie_helper/core/tabs/components/appbar.comp.dart';
+import 'package:movie_helper/core/tabs/discover/components/divider.comp.dart';
+import 'package:movie_helper/core/tabs/discover/components/genres.comp.dart';
 
-import 'package:movie_helper/core/tabs/discover/components/horizontal-genre-list.comp.dart';
-import 'package:movie_helper/core/tabs/discover/components/horizontal-overview-list.comp.dart';
-import 'package:movie_helper/core/tabs/discover/components/sliver-app-bar.comp.dart';
+import 'package:movie_helper/core/tabs/discover/components/medias.comp.dart';
 import 'package:movie_helper/core/tabs/discover/components/sliver-bloc-list.comp.dart';
-import 'package:movie_helper/core/tabs/discover/components/sliver-divider.comp.dart';
 import 'package:movie_helper/models/discover.models.dart';
-import 'package:movie_helper/screens/movie-details/movie-details.screen.dart';
 import 'package:movie_helper/services/http.service.dart';
 
 class DiscoverView extends StatefulWidget {
@@ -33,28 +32,32 @@ class _DiscoverViewState extends State<DiscoverView> {
         : RefreshIndicator(
             child: CustomScrollView(
               slivers: <Widget>[
-                SliverCustomAppBar(),
+                CustomAppBar(
+                  title: "Découverte",
+                  topLeftColor: Colors.blue,
+                  bottomRightColor: Colors.cyan,
+                ),
                 SliverDivider(title: "Film"),
                 SliverBloc(
                   title: "Actuellement en salle",
-                  list: HorizontalOverviewList(
-                    list: data.nowPlayingMovies,
+                  list: DiscoverList.fromMovie(
+                    movies: data.nowPlayingMovies,
                   ),
                   maxHeight: 300,
                   minHeight: 240,
                 ),
                 SliverBloc(
                   title: "Les plus populaires",
-                  list: HorizontalOverviewList(
-                    list: data.popularMovies,
+                  list: DiscoverList.fromMovie(
+                    movies: data.popularMovies,
                   ),
                   maxHeight: 300,
                   minHeight: 240,
                 ),
                 SliverBloc(
                   title: "Les mieux notés",
-                  list: HorizontalOverviewList(
-                    list: data.topRatedMovies,
+                  list: DiscoverList.fromMovie(
+                    movies: data.topRatedMovies,
                   ),
                   maxHeight: 300,
                   minHeight: 240,
@@ -62,8 +65,9 @@ class _DiscoverViewState extends State<DiscoverView> {
                 SliverBloc(
                   title: "Par genre",
                   icon: Icons.chevron_right,
-                  list: HorizontalGenreList(
-                    list: data.genresMovie,
+                  list: Genres(
+                    genres: data.genresMovie,
+                    mediaType: "movie",
                   ),
                   maxHeight: 100,
                   minHeight: 100,
@@ -71,16 +75,16 @@ class _DiscoverViewState extends State<DiscoverView> {
                 SliverDivider(title: "TV"),
                 SliverBloc(
                   title: "Les plus populaires",
-                  list: HorizontalOverviewList(
-                    list: data.popularTv,
+                  list: DiscoverList.fromTv(
+                    tvs: data.popularTv,
                   ),
                   maxHeight: 300,
                   minHeight: 240,
                 ),
                 SliverBloc(
                   title: "Les mieux notés",
-                  list: HorizontalOverviewList(
-                    list: data.topRatedTv,
+                  list: DiscoverList.fromTv(
+                    tvs: data.topRatedTv,
                   ),
                   maxHeight: 300,
                   minHeight: 240,
@@ -88,8 +92,9 @@ class _DiscoverViewState extends State<DiscoverView> {
                 SliverBloc(
                   title: "Par genre",
                   icon: Icons.chevron_right,
-                  list: HorizontalGenreList(
-                    list: data.genresTv,
+                  list: Genres(
+                    genres: data.genresTv,
+                    mediaType: "tv",
                   ),
                   maxHeight: 100,
                   minHeight: 100,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movie_helper/services/http.service.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 
 typedef void IndexCallback(int index);

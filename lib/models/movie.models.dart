@@ -1,42 +1,67 @@
 import 'package:flutter/widgets.dart';
-import 'package:movie_helper/models/company.models.dart';
 import 'package:movie_helper/models/genres.models.dart';
-import 'package:movie_helper/models/overview.models.dart';
+import 'package:movie_helper/models/people.models.dart';
 import 'package:movie_helper/models/video.models.dart';
 import 'package:movie_helper/services/json-parser.dart';
 
-class Movie {
+class MovieOverview {
+  final int id;
   final String overview;
   final dynamic voteAverage;
+  final String title;
+  final String posterPath;
+
+  MovieOverview({
+    this.id,
+    this.title,
+    this.overview,
+    this.posterPath,
+    this.voteAverage,
+  });
+
+  factory MovieOverview.fromJson(Map<String, dynamic> json) {
+    return MovieOverview(
+      id: json['id'] as int,
+      title: json['title'] as String,
+      overview: json['overview'] as String,
+      voteAverage: json['vote_average'],
+      posterPath: json['poster_path'] as String,
+    );
+  }
+}
+
+class Movie extends MovieOverview {
   final DateTime releaseDate;
-  final List<Overview> similarMovies;
-  final List<Overview> credits;
+  final List<MovieOverview> similars;
+  final List<Credit> credits;
   final Video video;
   // final List<CompanyOverview> companies;
   final String tagline;
-  final dynamic genres;
+  final List<Genre> genres;
   final Duration time;
   final String backdropPath;
-  final String title;
-  final int id;
-  final String posterPath;
 
   Movie({
+    id,
+    title,
+    posterPath,
+    overview,
+    voteAverage,
     @required this.video,
     @required this.credits,
-    @required this.similarMovies,
-    @required this.overview,
-    @required this.voteAverage,
+    @required this.similars,
     @required this.releaseDate,
     @required this.genres,
     // @required this.companies,
     @required this.tagline,
     @required this.time,
-    @required this.id,
-    @required this.title,
-    @required this.posterPath,
     @required this.backdropPath,
-  });
+  }) : super(
+            id: id,
+            title: title,
+            posterPath: posterPath,
+            overview: overview,
+            voteAverage: voteAverage);
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
@@ -55,8 +80,8 @@ class Movie {
         video: parseVideos(
           json["videos"]["results"],
         ),
-        similarMovies: json["similar"]['results']
-            .map<Overview>((dynamic item) => Overview.fromMovieJson(item))
+        similars: json["similar"]['results']
+            .map<MovieOverview>((dynamic item) => MovieOverview.fromJson(item))
             .toList(),
         credits: parseCredits(json["credits"])
         // companies: (json['production_companies'] as List<dynamic>)

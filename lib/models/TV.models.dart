@@ -1,44 +1,71 @@
 import 'package:flutter/widgets.dart';
 import 'package:movie_helper/models/genres.models.dart';
-import 'package:movie_helper/models/overview.models.dart';
 import 'package:movie_helper/models/people.models.dart';
 import 'package:movie_helper/models/season.models.dart';
 import 'package:movie_helper/models/video.models.dart';
 import 'package:movie_helper/services/json-parser.dart';
 
-class TV extends Overview {
+class TvOverview {
+  final int id;
   final String overview;
   final dynamic voteAverage;
-  final DateTime releaseDate;
-  final String title;
-  final List<Overview> similar;
-  final List<Overview> credits;
-  final Video video;
-  final int id;
   final String posterPath;
+  final String title;
+
+  TvOverview({
+    this.id,
+    this.overview,
+    this.posterPath,
+    this.title,
+    this.voteAverage,
+  });
+
+  factory TvOverview.fromJson(Map<String, dynamic> json) {
+    return TvOverview(
+      id: json['id'] as int,
+      title: json['name'] as String,
+      posterPath: json['poster_path'] as String,
+      overview: json['overview'] as String,
+      voteAverage: json['vote_average'],
+    );
+  }
+}
+
+class Tv extends TvOverview {
+  final DateTime releaseDate;
+  final List<TvOverview> similars;
+  final List<Credit> credits;
+  final Video video;
+
   final int numbeOfSeasons;
   final int numberOfEpisodes;
   final List<Genre> genres;
   final List<SeasonOverview> seasonsOverview;
 
-  TV({
+  Tv({
+    id,
+    title,
+    overview,
+    voteAverage,
+    posterPath,
     @required this.credits,
-    @required this.similar,
+    @required this.similars,
     @required this.seasonsOverview,
-    @required this.id,
-    @required this.title,
-    @required this.overview,
-    @required this.voteAverage,
     @required this.releaseDate,
-    @required this.posterPath,
     @required this.genres,
     @required this.numberOfEpisodes,
     @required this.numbeOfSeasons,
     @required this.video,
-  });
+  }) : super(
+          id: id,
+          title: title,
+          overview: overview,
+          voteAverage: voteAverage,
+          posterPath: posterPath,
+        );
 
-  factory TV.fromJson(Map<String, dynamic> json) {
-    return TV(
+  factory Tv.fromJson(Map<String, dynamic> json) {
+    return Tv(
       id: json['id'] as int,
       title: json['name'] as String,
       overview: json['overview'] as String,
@@ -56,8 +83,8 @@ class TV extends Overview {
       video: parseVideos(
         json['videos']['results'],
       ),
-      similar: json["similar"]['results']
-          .map<Overview>((dynamic item) => Overview.fromTVJson(item))
+      similars: json["similar"]['results']
+          .map<TvOverview>((dynamic item) => TvOverview.fromJson(item))
           .toList(),
       credits: parseCredits(json['credits']),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_helper/core/bottom-bar.dart';
 import 'package:movie_helper/core/tabs/discover/discover.view.dart';
+import 'package:movie_helper/core/tabs/search/search.view.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> views = <Widget>[
     DiscoverView(),
     Text("Favoris"),
-    Text("Recherche"),
+    SearchView(),
   ];
   int _tabIndex = 0;
 

@@ -1,4 +1,4 @@
-import 'package:movie_helper/models/overview.models.dart';
+import 'package:movie_helper/models/people.models.dart';
 import 'package:movie_helper/models/video.models.dart';
 
 Video parseVideos(List<dynamic> videosList) {
@@ -10,11 +10,11 @@ Video parseVideos(List<dynamic> videosList) {
   return Video(id: null);
 }
 
-List<Overview> parseCredits(Map<String, dynamic> json) {
+List<Credit> parseCredits(Map<String, dynamic> json) {
   List<dynamic> actors = json["cast"];
   List<dynamic> crew = json["crew"];
-  List<Overview> credits = new List<Overview>();
-  actors.forEach((dynamic item) => credits.add(Overview.fromPeopleJson(item)));
-  crew.forEach((dynamic item) => credits.add(Overview.fromPeopleJson(item)));
+  List<Credit> credits = new List<Credit>();
+  actors.forEach((dynamic item) => credits.add(Credit.fromJson(item)));
+  crew.forEach((dynamic item) => credits.add(Credit.fromJson(item)));
   return credits;
 }

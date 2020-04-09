@@ -1,13 +1,14 @@
 import 'package:movie_helper/models/genres.models.dart';
-import 'package:movie_helper/models/overview.models.dart';
+import 'package:movie_helper/models/movie.models.dart';
+import 'package:movie_helper/models/tv.models.dart';
 
 class Discover {
-  final List<Overview> popularMovies;
-  final List<Overview> topRatedMovies;
-  final List<Overview> nowPlayingMovies;
+  final List<MovieOverview> popularMovies;
+  final List<MovieOverview> topRatedMovies;
+  final List<MovieOverview> nowPlayingMovies;
   final List<Genre> genresMovie;
-  final List<Overview> popularTv;
-  final List<Overview> topRatedTv;
+  final List<TvOverview> popularTv;
+  final List<TvOverview> topRatedTv;
   final List<Genre> genresTv;
 
   Discover({
