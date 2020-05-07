@@ -46,14 +46,14 @@ class SearchBar extends StatefulWidget {
 
   //Suggestiondrop Down properties
   final int suggestionsApiFetchDelay;
-  final Function onValueChanged;
   final OnCompleteCallback onCompleteCallback;
+  final String defaultSearch;
 
   SearchBar({
     this.maxHeight = 200,
     this.suggestionsApiFetchDelay = 0,
-    this.onValueChanged,
     this.onCompleteCallback,
+    this.defaultSearch,
   });
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -77,6 +77,11 @@ class _SearchBarState extends State<SearchBar> {
   @override
   void initState() {
     super.initState();
+    print(widget.defaultSearch);
+    if (widget.defaultSearch != null) {
+      print("FROM LAST SEARCH");
+      controller.text = widget.defaultSearch;
+    }
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         print("has focus");
@@ -179,12 +184,9 @@ class _SearchBarState extends State<SearchBar> {
       child: TextField(
         controller: controller,
         focusNode: this._focusNode,
-        autofocus: true,
+        autofocus: widget.defaultSearch != null ? false : true,
         onChanged: (text) {
           if (text.trim().isNotEmpty) {
-            (widget.onValueChanged != null)
-                ? widget.onValueChanged(text)
-                : () {};
             isSearching = true;
             scrollController.animateTo(
               0.0,
@@ -201,7 +203,6 @@ class _SearchBarState extends State<SearchBar> {
           this._focusNode.unfocus();
           suggestionsStreamController.sink.add([]);
           await storage.storeSearch(controller.text);
-          print(await storage.loadSearch());
           widget.onCompleteCallback(controller.text);
         },
         decoration: InputDecoration(

@@ -52,7 +52,7 @@ class _MovieDetailsBodyState extends State<MovieDetailsBody> {
   ScrollController _scrollController;
   double appBarHeight = 100;
   double topFAB = 220;
-  double posterHeight = 200;
+  double posterHeight = 180;
 
   @override
   void initState() {
@@ -60,6 +60,7 @@ class _MovieDetailsBodyState extends State<MovieDetailsBody> {
     movieDetails = widget.movie;
     _scrollController = new ScrollController();
     _scrollController.addListener(() => scrollListener());
+    print(posterHeight);
   }
 
   @override
@@ -161,7 +162,6 @@ class _MovieDetailsBodyState extends State<MovieDetailsBody> {
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                       child: Image.network(
                         "https://image.tmdb.org/t/p/w780/${movieDetails.posterPath}",
-                        height: posterHeight,
                       ),
                     ),
                   ),
@@ -189,17 +189,17 @@ class _MovieDetailsBodyState extends State<MovieDetailsBody> {
   void scrollListener() {
     setState(() {
       topFAB = 220;
-      posterHeight = 220;
+      posterHeight = 200;
     });
     if (_scrollController.hasClients) {
       setState(() {
         topFAB -= _scrollController.offset;
-        posterHeight -= _scrollController.offset + 37;
+        posterHeight -= _scrollController.offset + 17;
       });
       if (topFAB == 0) {
         setState(() {
           topFAB = 220;
-          posterHeight = 220;
+          posterHeight = 200;
         });
       } else if (topFAB < 155) {
         setState(() {

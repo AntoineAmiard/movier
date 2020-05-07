@@ -17,11 +17,16 @@ class Synopsis extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Text(
-          overview,
-          style: textStyle.body1,
-          // textAlign: ,
-        )
+        overview != null
+            ? Text(
+                overview,
+                style: textStyle.body1,
+                // textAlign: ,
+              )
+            : Container(
+                height: 100,
+                child: Text("Aucun synopsis disponible"),
+              )
       ],
     );
   }

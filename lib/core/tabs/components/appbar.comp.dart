@@ -12,7 +12,7 @@ class CustomAppBar extends StatelessWidget {
     return SliverAppBar(
       stretch: true,
       backgroundColor: Colors.transparent,
-      expandedHeight: 175.0,
+      expandedHeight: 125.0,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: <StretchMode>[
           StretchMode.zoomBackground,

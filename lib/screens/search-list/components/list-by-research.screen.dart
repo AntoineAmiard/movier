@@ -118,7 +118,9 @@ class ListByResearch extends StatelessWidget {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 child: Text(
-                                  item.overview ?? "null",
+                                  item.overview != ""
+                                      ? item.overview
+                                      : "Aucun synopsis dispnoible",
                                   maxLines: 6,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,
@@ -169,7 +171,6 @@ class ListByResearch extends StatelessWidget {
             fit: BoxFit.fill,
           ),
           borderRadius: BorderRadius.circular(5),
-          // fit: BoxFit.fill,
         );
       },
       errorWidget: (context, string, object) {
@@ -188,7 +189,7 @@ class ListByResearch extends StatelessWidget {
                   color: Colors.red,
                 ),
                 Text(
-                  "Erreur de chargement de l'image",
+                  "Pas d'image disponible",
                   textAlign: TextAlign.center,
                 )
               ],

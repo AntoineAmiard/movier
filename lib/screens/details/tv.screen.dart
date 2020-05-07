@@ -55,7 +55,7 @@ class _TvDetailsBodyState extends State<TvDetailsBody> {
   ScrollController _scrollController;
   double appBarHeight = 100;
   double topFAB = 220;
-  double posterHeight = 200;
+  double posterHeight = 180;
 
   @override
   void initState() {

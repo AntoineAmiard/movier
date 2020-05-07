@@ -3,7 +3,7 @@ import 'package:movie_helper/models/genres.models.dart';
 import 'package:movie_helper/models/people.models.dart';
 import 'package:movie_helper/models/season.models.dart';
 import 'package:movie_helper/models/video.models.dart';
-import 'package:movie_helper/services/json-parser.dart';
+import 'package:movie_helper/services/json-parser.service.dart';
 
 class TvOverview {
   final int id;

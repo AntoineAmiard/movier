@@ -56,25 +56,32 @@ class Similars extends StatelessWidget {
             style: textStyle.title,
           ),
         ),
-        Container(
-          height: 300,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: similars.length,
-            itemBuilder: (context, index) {
-              Similar similar = similars[index];
-              return Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: GestureDetector(
-                  child: SimilarItem(
-                      name: similar.title, posterPath: similar.poster),
-                  onTap: () =>
-                      onSimilarTap(similar.id, similar.mediaType, context),
+        similars.length != 0
+            ? Container(
+                height: 300,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: similars.length,
+                  itemBuilder: (context, index) {
+                    Similar similar = similars[index];
+                    return Padding(
+                      padding: EdgeInsets.only(right: 10),
+                      child: GestureDetector(
+                        child: SimilarItem(
+                            name: similar.title, posterPath: similar.poster),
+                        onTap: () => onSimilarTap(
+                            similar.id, similar.mediaType, context),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
+              )
+            : Container(
+                height: 220,
+                child: Center(
+                  child: Text("Aucun resultats trouvés"),
+                ),
+              ),
       ],
     );
   }
@@ -112,36 +119,10 @@ class SimilarItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          CachedNetworkImage(
-            imageUrl: "https://image.tmdb.org/t/p/w780/${this.posterPath}",
-            imageBuilder: (context, image) {
-              return Container(
-                height: 220,
-                width: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  image: DecorationImage(
-                    image: image,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            },
-            filterQuality: FilterQuality.high,
+          Container(
             height: 220,
             width: 150,
-            placeholderFadeInDuration: Duration(seconds: 1),
-            placeholder: (context, url) => SizedBox(
-              height: 220,
-              width: 150,
-              child: Container(
-                height: 220,
-                width: 150,
-                child: Center(
-                  child: Icon(Icons.image, size: 40, color: Colors.grey),
-                ),
-              ),
-            ),
+            child: _buildPoster(this.posterPath),
           ),
           SizedBox(
             height: 10,
@@ -154,6 +135,39 @@ class SimilarItem extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildPoster(String poster) {
+    return CachedNetworkImage(
+      imageUrl: "https://image.tmdb.org/t/p/w780/$poster",
+      imageBuilder: (context, image) {
+        return ClipRRect(
+          child: Image(
+            image: image,
+            // fit: BoxFit.fill,
+          ),
+          borderRadius: BorderRadius.circular(5),
+        );
+      },
+      filterQuality: FilterQuality.high,
+      placeholderFadeInDuration: Duration(seconds: 1),
+      errorWidget: (context, string, object) {
+        return Opacity(
+          opacity: 0.5,
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.white)),
+            child: Icon(Icons.image),
+          ),
+        );
+      },
+      placeholder: (context, string) {
+        return Center(
+          child: Icon(Icons.image),
+        );
+      },
     );
   }
 }

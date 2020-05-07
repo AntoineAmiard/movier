@@ -1,12 +1,12 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:movie_helper/core/tabs/components/appbar.comp.dart';
 import 'package:movie_helper/core/tabs/search/Search-bar-focus.screen.dart';
 import 'package:movie_helper/core/tabs/search/components/fake-search-bar.comp.dart';
-import 'package:movie_helper/core/tabs/search/components/last-search.comp.dart';
+import 'package:movie_helper/core/tabs/search/components/last-searches.comp.dart';
 import 'package:movie_helper/services/http.service.dart';
 import 'package:movie_helper/services/storage.service.dart';
+
+typedef void OnTap(BuildContext context);
 
 class SearchView extends StatefulWidget {
   @override
@@ -51,7 +51,9 @@ class _SearchViewState extends State<SearchView> {
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             child: LastSearches(
-                              searches: snap.data,
+                              onCallback: (searchString) =>
+                                  _onTap(context, searchString),
+                              searches: List.from(snap.data.reversed),
                             ),
                           );
                         }
@@ -70,17 +72,17 @@ class _SearchViewState extends State<SearchView> {
     );
   }
 
-  void _onTap(context) async {
+  void _onTap(BuildContext context, [String searchString]) async {
     setState(() => displaySearches = false);
 
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
-        return SearchBarFocus();
+        return SearchBarFocus(
+          searchString: searchString,
+        );
       }),
     );
-    print("refresh");
     setState(() => displaySearches = true);
-    print("state");
   }
 }

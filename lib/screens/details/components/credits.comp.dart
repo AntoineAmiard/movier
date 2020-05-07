@@ -33,52 +33,10 @@ class Credits extends StatelessWidget {
                   width: 100,
                   child: Column(
                     children: <Widget>[
-                      Opacity(
-                        opacity: 0.8,
-                        child: credit.profilePath != null
-                            ? CachedNetworkImage(
-                                imageUrl:
-                                    "https://image.tmdb.org/t/p/w780/${credit.profilePath}",
-                                imageBuilder: (context, image) {
-                                  return Container(
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(90)),
-                                      image: DecorationImage(
-                                        image: image,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                filterQuality: FilterQuality.high,
-                                height: 100,
-                                width: 100,
-                                placeholderFadeInDuration: Duration(seconds: 1),
-                                placeholder: (context, url) => SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Container(
-                                    height: 100,
-                                    width: 100,
-                                    child: Center(
-                                      child: Icon(Icons.person,
-                                          size: 40, color: Colors.grey),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : CircleAvatar(
-                                radius: 50,
-                                backgroundColor: Colors.purpleAccent[100],
-                                child: Icon(
-                                  Icons.person,
-                                  size: 55,
-                                  color: Colors.white,
-                                ),
-                              ),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        child: _buildAvatar(credit.profilePath),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 8),
@@ -102,6 +60,38 @@ class Credits extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildAvatar(String profile) {
+    return CachedNetworkImage(
+      imageUrl: "https://image.tmdb.org/t/p/w780/$profile",
+      imageBuilder: (context, image) {
+        return CircleAvatar(
+          backgroundImage: image,
+        );
+      },
+      filterQuality: FilterQuality.high,
+      placeholderFadeInDuration: Duration(seconds: 1),
+      errorWidget: (context, string, object) {
+        return Opacity(
+          opacity: 0.6,
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(90),
+                border: Border.all(color: Colors.white)),
+            child: Icon(
+              Icons.person,
+              size: 40,
+            ),
+          ),
+        );
+      },
+      placeholder: (context, string) {
+        return Center(
+          child: Icon(Icons.person),
+        );
+      },
     );
   }
 }

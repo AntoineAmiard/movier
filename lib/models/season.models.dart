@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:movie_helper/models/episode.models.dart';
 import 'package:movie_helper/models/video.models.dart';
 import 'package:movie_helper/services/http.service.dart';
-import 'package:movie_helper/services/json-parser.dart';
+import 'package:movie_helper/services/json-parser.service.dart';
 
 class SeasonOverview {
   final int id;

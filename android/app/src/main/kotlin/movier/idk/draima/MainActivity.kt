@@ -1,4 +1,4 @@
-package com.example.movie_helper
+package movier.idk.draima
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:movie_helper/models/genres.models.dart';
 import 'package:movie_helper/models/people.models.dart';
 import 'package:movie_helper/models/video.models.dart';
-import 'package:movie_helper/services/json-parser.dart';
+import 'package:movie_helper/services/json-parser.service.dart';
 
 class MovieOverview {
   final int id;

@@ -9,7 +9,9 @@ class Storage {
   Future<void> storeSearch(String search) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> searches = await loadSearch();
-    searches.add(search);
+    if (!searches.contains(search)) {
+      searches.add(search);
+    }
     return prefs.setStringList('search', searches);
   }
 

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_helper/models/season.models.dart';
 import 'package:movie_helper/screens/details/season.screen.dart';
@@ -33,10 +34,12 @@ class SeasonsList extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   child: ListTile(
-                    leading: Image.network(
-                      "https://image.tmdb.org/t/p/w780/${season.posterPath}",
-                      fit: BoxFit.contain,
-                      // height: 100,
+                    contentPadding: EdgeInsets.only(left: 0),
+                    leading: Container(
+                      height: 100,
+                      width: 40,
+                      margin: EdgeInsets.all(3),
+                      child: _buildPoster(season.posterPath),
                     ),
                     title: Text(season.name),
                     trailing: Icon(Icons.arrow_right),
@@ -59,6 +62,37 @@ class SeasonsList extends StatelessWidget {
           seasonNumber: seasonNumber,
         ),
       ),
+    );
+  }
+
+  Widget _buildPoster(String poster) {
+    return CachedNetworkImage(
+      imageUrl: "https://image.tmdb.org/t/p/w500$poster",
+      imageBuilder: (context, image) {
+        return ClipRRect(
+          child: Image(
+            image: image,
+            // fit: BoxFit.contain,
+          ),
+          borderRadius: BorderRadius.circular(3),
+        );
+      },
+      errorWidget: (context, string, object) {
+        return Opacity(
+          opacity: 0.5,
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(color: Colors.white)),
+            child: Icon(Icons.image),
+          ),
+        );
+      },
+      placeholder: (context, string) {
+        return Center(
+          child: Icon(Icons.image),
+        );
+      },
     );
   }
 }

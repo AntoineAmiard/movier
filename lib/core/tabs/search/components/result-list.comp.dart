@@ -3,15 +3,19 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:movie_helper/models/movie.models.dart';
 import 'package:movie_helper/models/tv.models.dart';
+import 'package:movie_helper/screens/details/movie.screen.dart';
+import 'package:movie_helper/screens/details/tv.screen.dart';
 import 'package:movie_helper/screens/search-list/movie.screen.dart';
 import 'package:movie_helper/screens/search-list/tv.screen.dart';
 
 class Result {
+  final int id;
   final String title;
   final String poster;
   final dynamic voteAverage;
 
   Result({
+    this.id,
     this.title,
     this.poster,
     this.voteAverage,
@@ -35,6 +39,7 @@ class ResultList extends StatelessWidget {
               title: movie.title,
               poster: movie.posterPath,
               voteAverage: movie.voteAverage,
+              id: movie.id,
             ),
           )
           .toList(),
@@ -51,6 +56,7 @@ class ResultList extends StatelessWidget {
                 title: tv.title,
                 poster: tv.posterPath,
                 voteAverage: tv.voteAverage,
+                id: tv.id,
               ))
           .toList(),
       title: "Séries",
@@ -70,46 +76,62 @@ class ResultList extends StatelessWidget {
           title,
           style: textStyle.display1,
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemExtent: 75,
-          physics: new ScrollPhysics(),
-          itemCount: min(2, results.length),
-          itemBuilder: (BuildContext context, int index) {
-            Result item = results[index];
-            return Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: GestureDetector(
-                onTap: () => {},
-                child: ResultItem(
-                  poster: item.poster,
-                  title: item.title,
-                  voteAverage: item.voteAverage,
+        results.length != 0
+            ? Column(
+                children: <Widget>[
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemExtent: 75,
+                    physics: new ScrollPhysics(),
+                    itemCount: min(2, results.length),
+                    itemBuilder: (BuildContext context, int index) {
+                      Result item = results[index];
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: GestureDetector(
+                          onTap: () => _onItemTap(context, item.id),
+                          child: AbsorbPointer(
+                            child: ResultItem(
+                              poster: item.poster,
+                              title: item.title,
+                              voteAverage: item.voteAverage,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlineButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Voir plus "),
+                          Icon(Icons.chevron_right)
+                        ],
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                      ),
+                      onPressed: () => _onPlusTap(context, searchString),
+                    ),
+                  ),
+                ],
+              )
+            : Container(
+                height: 150,
+                child: Center(
+                  child: Text("Aucun resultats"),
                 ),
               ),
-            );
-          },
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: OutlineButton(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Voir plus "), Icon(Icons.chevron_right)],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(50),
-              ),
-            ),
-            onPressed: () => _onItemTap(context, searchString),
-          ),
-        ),
       ],
     );
   }
 
-  void _onItemTap(context, String string) {
+  void _onPlusTap(context, String string) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -118,7 +140,29 @@ class ResultList extends StatelessWidget {
             return MovieSearchList(
               string: string,
             );
-          else if (mediaType == "tv") return TvListSearch(string: string);
+          else if (mediaType == "tv")
+            return TvListSearch(
+              string: string,
+            );
+        },
+        maintainState: true,
+      ),
+    );
+  }
+
+  void _onItemTap(context, int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          if (mediaType == "movie")
+            return MovieDetailsScreen(
+              id: id,
+            );
+          else if (mediaType == "tv")
+            return TvDetailsScreen(
+              id: id,
+            );
         },
         maintainState: true,
       ),
@@ -141,6 +185,7 @@ class ResultItem extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textStyle = Theme.of(context).textTheme;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         ClipRRect(
           borderRadius: BorderRadius.circular(2.5),
@@ -153,48 +198,36 @@ class ResultItem extends StatelessWidget {
         SizedBox.fromSize(
           size: Size.fromWidth(10),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Text(
-                  title,
-                  style: textStyle.subhead,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: textStyle.body1,
-                    children: [
-                      WidgetSpan(
-                        child: Icon(
-                          Icons.stars,
-                          size: textStyle.body1.fontSize + 2,
-                          color: Colors.yellow,
-                        ),
-                      ),
-                      TextSpan(text: " $voteAverage / 10"),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
         Expanded(
-          child: Container(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(Icons.chevron_right),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: textStyle.subhead,
+              ),
+              RichText(
+                text: TextSpan(
+                  style: textStyle.body1,
+                  children: [
+                    WidgetSpan(
+                      child: Icon(
+                        Icons.stars,
+                        size: textStyle.body1.fontSize + 2,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                    TextSpan(text: " $voteAverage / 10"),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
+        Icon(Icons.chevron_right),
       ],
     );
   }

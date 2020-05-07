@@ -25,26 +25,26 @@ class CustomAppBar extends StatelessWidget {
         collapseMode: CollapseMode.parallax,
         centerTitle: false,
         titlePadding: EdgeInsets.fromLTRB(150, 0, 50, 50),
-        title: Align(
+        title:
+            // Align(
+            //   child: Text(
+            //     title,
+            //     maxLines: 2,
+            //     softWrap: true,
+            //     overflow: TextOverflow.clip,
+            //   ),
+            //   alignment: Alignment.bottomRight,
+            // ),
+
+            Container(
+          width: MediaQuery.of(context).size.width * 0.35,
           child: Text(
             title,
             maxLines: 2,
-            softWrap: true,
-            overflow: TextOverflow.clip,
+            style: textStyle.title,
+            overflow: TextOverflow.ellipsis,
           ),
-          alignment: Alignment.bottomRight,
         ),
-
-        // child: Container(
-        //   // width: MediaQuery.of(context).size.width * 0.35,
-        //   child:
-        //     Text(
-        //   title,
-        //   maxLines: 3,
-        //   style: textStyle.title,
-        //   overflow: TextOverflow.ellipsis,
-        // ),
-        // ),
       ),
     );
   }
